@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>局域网文字/文件P2P传输工具</title>
+  <script src="./xchatuser.js?v=7"></script>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="stylesheet" href="./style.css?v=7">
+  <style>
+    body .dragtip {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 999;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+    }
+
+    body.dragover .dragtip {
+      display: block;
+    }
+    body.dragover .dragtip h1 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: 0;
+      transform: translate(-50%, -50%);
+      font-size: 32px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dragtip">
+    <h1>松开发送文件</h1>
+  </div>
+  <div class="left">
+    <div class="chat-wrapper">
+    </div>
+    <textarea id="messageInput" class="txt-msg" onkeydown="enterTxt(event)"></textarea>
+  </div>
+  <div class="right">
+    <ul id="users">
+    </ul>
+  </div>
+
+  <div class="modal" id="userSelectModal">
+    <div class="modal-content">
+      <h3>选择接收用户</h3>
+      <div class="user-list" id="userSelectList">
+      </div>
+      <div class="progress-container" style="display: none;">
+        <div class="progress-text">正在发送...</div>
+        <div class="progress-bar">
+          <div class="progress-bar-inner"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="cancelSendFile()">取消</button>
+        <button onclick="confirmSendFile()">发送</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./index.js?v=7"></script>
+
+  <script>
+    let droptarget = document.body;
+    let pendingFile = null;
+    
+    async function handleEvent(event) {
+      event.preventDefault();
+      if (event.type === 'drop') {
+        droptarget.classList.remove('dragover');
+        if (event.dataTransfer.files.length > 0) {
+          await sendFile(event.dataTransfer.files[0]);
+        }
+      } else if (event.type === 'dragleave') {
+        droptarget.classList.remove('dragover');
+      } else {
+        droptarget.classList.add('dragover');
+      }
+    }
+
+    droptarget.addEventListener("dragenter", handleEvent);
+    droptarget.addEventListener("dragover", handleEvent);
+    droptarget.addEventListener("drop", handleEvent);
+    droptarget.addEventListener("dragleave", handleEvent);
+  </script>
+</body>
+</html>

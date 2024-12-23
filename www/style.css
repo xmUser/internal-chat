@@ -1,0 +1,526 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: rgba(0, 0, 0, 0.643);
+  color: #5beff2d8;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+pre {
+  margin: 0;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+.left {
+  flex: 1;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: visible;
+}
+.right {
+  width: 200px;
+  color: #ffffffbb;
+  border-left: 1px solid rgb(151, 151, 151);
+  padding: 10px;
+  background-color: rgb(47, 47, 47);
+  overflow: auto;
+}
+.right ul {
+  /* list-style: none; */
+  padding: 0 0 0 20px;
+  margin: 0;
+}
+.right ul li {
+  user-select: none;
+  cursor: default;
+  line-height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.chat-wrapper {
+  flex: 1;
+  font-size: 18px;
+  line-height: 24px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.chat-item {
+  display: flex;
+  margin: 10px 10px 0 10px;
+  flex-wrap: wrap;
+}
+.chat-item .chat-item_user {
+  margin-right: 10px;
+  color: #ffffffbb;
+  width: auto;
+  text-align: right;
+  user-select: none;
+  display: flex;
+  align-items: center;
+}
+.chat-item_time {
+  color: #888;
+  font-size: 12px;
+  margin-right: 10px;
+  user-select: none;
+  display: flex;
+  align-items: center;
+}
+.chat-item .chat-item_content {
+  flex: 1;
+  word-wrap: break-word;
+  word-break: break-all;
+  min-width: 200px;
+}
+.chat-item .chat-item_content pre{
+  white-space: pre-wrap;
+  /* 自动换行 */
+  word-wrap: break-word;
+  word-break: break-all;
+}
+.chat-item .chat-item_content pre a{
+  color: #5beff2d8;
+  text-decoration: none;
+}
+.chat-item a.file, .chat-item a.file:visited {
+  color: #5beff2d8;
+  text-decoration: none;
+}
+.txt-msg {
+  outline: none;
+  color: #000;
+  height: 20%;
+  min-height: 100px;
+  background-color: rgb(236, 236, 236);
+  border: none;
+  resize: none;
+  padding: 8px;
+  padding-right: 100px;
+  font-size: 16px;
+  line-height: 22px;
+  box-sizing: border-box;
+  margin: 0 20px 20px 20px;
+  position: relative;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #2f2f2f;
+  padding: 20px;
+  border-radius: 5px;
+  min-width: 300px;
+}
+
+.modal h3 {
+  margin: 0 0 15px 0;
+  color: #5beff2d8;
+}
+
+.user-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.user-select-item {
+  padding: 8px;
+  margin: 5px 0;
+  cursor: pointer;
+  color: #ffffffbb;
+}
+
+.user-select-item:hover {
+  background: rgba(91, 239, 242, 0.1);
+}
+
+.user-select-item label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.user-select-item input[type="checkbox"] {
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.user-select-item span {
+  flex: 1;
+}
+
+.modal-footer {
+  margin-top: 15px;
+  text-align: right;
+}
+
+.modal-footer button {
+  padding: 5px 15px;
+  margin-left: 10px;
+  background: #5beff2d8;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.modal-footer button:hover {
+  background: #4bd8e6d8;
+}
+
+.modal-footer button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.progress-container {
+  margin: 15px 0;
+}
+
+.progress-text {
+  color: #ffffffbb;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-bar-inner {
+  width: 0%;
+  height: 100%;
+  background: #5beff2d8;
+  transition: width 0.3s ease;
+}
+
+/* 修改连接状态指示器样式 */
+.connection-status {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 1000;
+  color: #fff;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.2s ease;
+}
+
+/* 拖动时的样式 */
+.connection-status.dragging {
+  cursor: grabbing;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* 悬停效果 */
+.connection-status:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+/* 添加系统消息样式 */
+.chat-item.system-message {
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.chat-item.system-message .chat-item_user {
+  color: #f39c12;
+}
+
+/* 修改昵称按钮样式 */
+.nickname-button {
+  position: static;
+  display: block;
+  width: calc(100% - 20px);
+  margin: 0 auto 10px;
+  padding: 8px 0;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: rgba(91, 239, 242, 0.85);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nickname-button:hover {
+  background-color: rgba(75, 216, 230, 0.95);
+}
+
+/* 房间信息样式 */
+.room-info {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  text-align: center;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.room-info.room-full {
+  background-color: rgba(192, 57, 43, 0.3);
+  color: #e74c3c;
+}
+
+/* 如果您是管理员，可以添加设置按钮 */
+.room-info.admin {
+  cursor: pointer;
+}
+
+.room-info.admin:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* 文件预览样式 */
+.file-preview {
+  display: inline-block;
+  margin: 5px 0;
+}
+
+.file-preview img,
+.file-preview video {
+  max-width: 200px;
+  max-height: 150px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  object-fit: cover;
+}
+
+.file-preview video {
+  background-color: #000;
+}
+
+/* 媒体预览模态框 */
+.media-preview-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.media-preview-content {
+  background-color: #2f2f2f;
+  border-radius: 8px;
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+}
+
+.media-preview-header {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.media-preview-title {
+  color: #fff;
+  font-size: 16px;
+}
+
+.media-preview-header button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.media-preview-header button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.media-preview-body {
+  padding: 20px;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.media-preview-body img,
+.media-preview-body video {
+  max-width: 100%;
+  max-height: calc(90vh - 100px);
+  object-fit: contain;
+}
+
+/* 表情容器样式 */
+.emoji-container {
+  position: relative;
+  margin: 0;
+}
+
+/* 表情切换按钮样式 */
+.emoji-toggle-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.emoji-toggle-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 表情面板样式 */
+.emoji-panel {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  width: 320px;
+  background-color: rgb(47, 47, 47);
+  border-radius: 4px;
+  padding: 10px;
+  display: none;
+  flex-wrap: wrap;
+  gap: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* 表情按钮样式 */
+.emoji-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.emoji-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 修改滚动条样式 */
+.emoji-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.emoji-panel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.emoji-panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.emoji-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* 调整输入框上边距 */
+.txt-msg {
+  margin-top: 10px;
+}
+
+/* 工具栏容器样式 */
+.toolbar-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 20px 0;
+  padding: 5px;
+  background-color: rgba(47, 47, 47, 0.5);
+  border-radius: 4px;
+}
+
+/* 文件按钮容器样式 */
+.file-button-container {
+  position: relative;
+}
+
+/* 文件按钮样式 */
+.file-toggle-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  color: #fff;
+}
+
+.file-toggle-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 修改表情容器样式 */
+.emoji-container {
+  position: relative;
+}
+
+/* 调整表情面板位置 */
+.emoji-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 300px; /* 确保面板有足够宽度 */
+}
